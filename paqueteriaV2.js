@@ -1,7 +1,7 @@
 // Q0. Crear el escenario de datos con la correspondiente integridad referencial en un único archivo. La ejecución de dicho archivo debe insertar la totalidad de datos en las correspondientes instancias.
 use('Paqueteria');
 
-/* 
+
 db.getCollection('tipoEnvio').insertMany([
     {
         ID: 1,
@@ -733,69 +733,81 @@ db.getCollection('envio').insertMany([
         estatus: "tránsito"
     },
 ]);
- */
+
 
 // Q1. Listar los datos de todas las oficinas
-db.getCollection('envio').aggregate([
-    {$unwind: {path: "$origen"}},
-    {$group: {
-        _id: "$origen.ID",
-        origen: { $first: "$origen" } 
-      }},
-    {$project: {
-        _id: 0,
-        origen: 1
-      }}
+// db.getCollection('oficina').find();
+db.envio.aggregate([
+    {
+      $project: {
+        oficina: {
+          $concatArrays: ["$origen", "$destino"]
+        }
+      }
+    },
+    { 
+      $unwind: "$oficina" 
+    },
+    {
+      $group: {
+        _id: "$oficina"
+      }
+    },
+    {
+      $project: {
+        oficina: "$_id",
+        _id: 0
+      }
+    }
   ]);
-  
 
 // Q2. Listar los envíos realizados en determinada oficina con estatus en tránsito.
 //db.getCollection('envio').find({'origen': 'OF001', 'estatus': 'tránsito'});
-/* db.getCollection('envio').aggregate([
-    {$match: { "origen.ID": "OF001", "estatus": "tránsito" }},
-    {$project: { _id: 0 }}
-  ]); */
 
 // Q3. Listar los envíos que utilizan un tipo específico de envío.
 // db.getCollection('envio').find({'tipoEnvio': 1});
-/* db.getCollection('envio').aggregate([
-    {$match: { 'tipoEnvio': 1 }},
-    {$project: { _id: 0 }}
-  ]); */
 
 // Q4. Listar los envíos realizados por un cliente en específico en todas las oficinas.
-/* db.getCollection('envio').aggregate([
-    {$match: { 'cliente.CURP': 'GARC910827HDFRSL03' }},
-    {$project: { _id: 0 }}
-  ]); */
+// db.getCollection('envio').find({'cliente.CURP': 'GARC910827HDFRSL03'});
 
 // Q5. Listar los clientes que han realizado envíos en una determinada oficina.
 /* db.getCollection('envio').aggregate([
-    {$match: { 'origen.ID': 'OF001' }},
-    {$project: { 
-        _id: 0,
-        'cliente': 1
-    }}
-  ]); */
+    { $match: { 'origen': 'OF001' }},
+    { $lookup: {
+      from: 'cliente',
+      localField: 'cliente.CURP',
+      foreignField: 'CURP',
+      as: 'clientesEnvio'
+    }},
+    { $project: { '_id': 0, 'clientesEnvio': 1 }}
+]); */
 
 // Q6. Listar los envíos de todas las oficinas con estatus de entregado.
 // db.getCollection('envio').find({ 'estatus': 'entregado'}, { '_id': 0});
-/* db.getCollection('envio').aggregate([
-    {$match: { 'estatus': 'entregado' }},
-    {$project: { _id: 0 }}
-  ]); */
 
 // Q7. Listar los clientes y sus envíos que se han remitido por el servicio terrestre considerando todas las oficinas.
 /* db.getCollection('envio').aggregate([
-    {$match: { 'tipoEnvio': 1 }},
-    {$project: { _id: 0 }}
-  ]); */
+    { $match: { 'tipoEnvio': 1 } },
+    { $lookup: {
+      from: 'cliente',
+      localField: 'cliente.CURP',
+      foreignField: 'CURP',
+      as: 'clienteTerrestre'
+    }},
+    { $project: { '_id': 0 } }
+]); */
 
 // Q8. Listar los clientes y sus envíos se han remitido por el servicio express considerando una oficina en específico.
 /* db.getCollection('envio').aggregate([
-    {$match: { 'origen.ID': 'OF004', 'tipoEnvio': 3 }},
-    {$project: { _id: 0 }}
-  ]); */
+    { $match: { 'tipoEnvio': 3, 'origen': 'OF004' } },
+    { $lookup: {
+      from: 'cliente',
+      localField: 'cliente.CURP',
+      foreignField: 'CURP',
+      as: 'clienteTerrestre'
+    }},
+    { $project: { '_id': 0 } }
+]); */
 
                                                                                                     
                                                                                                     
