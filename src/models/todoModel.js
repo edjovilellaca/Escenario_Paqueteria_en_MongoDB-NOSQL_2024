@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const todoSchema = mongoose.Schema({
+const todoModel = mongoose.Schema({
     ID: {type: Number},
     fechaEnvio: {type: Date},
     origen: {
@@ -45,5 +45,4 @@ const todoSchema = mongoose.Schema({
     estatus: {type: String}
 });
 
-const todo = mongoose.model('todo', todoSchema);
-module.exports = todo;
+module.exports = mongoose.model('todo', todoModel);

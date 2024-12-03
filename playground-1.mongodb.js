@@ -736,7 +736,7 @@ db.getCollection('envio').insertMany([
  */
 
 // Q1. Listar los datos de todas las oficinas
-db.getCollection('envio').aggregate([
+/* db.getCollection('envio').aggregate([
     {$unwind: {path: "$origen"}},
     {$group: {
         _id: "$origen.ID",
@@ -746,7 +746,7 @@ db.getCollection('envio').aggregate([
         _id: 0,
         origen: 1
       }}
-  ]);
+  ]); */
   
 
 // Q2. Listar los envíos realizados en determinada oficina con estatus en tránsito.
