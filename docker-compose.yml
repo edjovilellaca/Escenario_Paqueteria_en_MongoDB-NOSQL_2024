@@ -1,6 +1,6 @@
 services:
   app01:
-    image: edjovilellaca/paqueteriamongo
+    build: .
     ports:
       - "3000:3000"
     depends_on:
