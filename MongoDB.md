@@ -1,3 +1,5 @@
+## [Link a Github](https://github.com/edjovilellaca/Escenario_Paqueteria_en_MongoDB-NOSQL_2024.git)
+
 # Caso 01 - Empresa de Paquetería (Envíos)
 
 La empresa de paquetería opera utilizando bases de datos no relacionales (MongoDB) para gestionar su operación. A continuación, se describe el escenario de datos, el funcionamiento de las colecciones, y cómo ejecutar consultas específicas (queries) sobre estas colecciones.
